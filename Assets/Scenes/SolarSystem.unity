@@ -203,10 +203,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.5
+    x: 0
     y: 0.5
-    width: 1
-    height: 1
+    width: 0.5
+    height: 0.5
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thrustSpeed: 200
-  rollSpeed: 0.1
+  rollSpeed: 0.05
   EnergyLeft: 100
   maxEnergy: 100
 --- !u!114 &512555576
@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spaceship: {fileID: 512555574}
-  mouseSensitivity: 100
+  mouseSensitivity: 1
   newSceneName: PlanetSurface
 --- !u!23 &512555581
 MeshRenderer:
