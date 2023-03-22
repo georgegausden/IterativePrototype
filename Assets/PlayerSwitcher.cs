@@ -9,6 +9,7 @@ public class PlayerSwitcher : MonoBehaviour
     public Quaternion newObjectRotation;
     public MeshFilter playerMeshFilter;
     public Collider playerCollider;
+    public bool IsRocket = false;
 
 
 
@@ -61,7 +62,7 @@ public class PlayerSwitcher : MonoBehaviour
             meshRenderer.sharedMaterial = material;
 
 
-
+            IsRocket = true;
 
 
 
@@ -75,7 +76,7 @@ public class PlayerSwitcher : MonoBehaviour
             //transform.rotation = newObjectRotation;
 
             //remove the old object
-            //Destroy(collision.gameObject);
+            Destroy(collision.gameObject);
 
             this.GetComponent<AudioSource>().Play();
 

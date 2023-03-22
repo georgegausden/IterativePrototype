@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Actors
   - TrackingObject
+  - Playable
   layers:
   - Default
   - TransparentFX
