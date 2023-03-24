@@ -7,6 +7,8 @@ TagManager:
   - Actors
   - TrackingObject
   - Playable
+  - Controller
+  - FuelCell
   layers:
   - Default
   - TransparentFX

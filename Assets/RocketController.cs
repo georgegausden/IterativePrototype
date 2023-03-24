@@ -1,55 +1,71 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RocketController : MonoBehaviour
 {
-    public float speed = 10f;
-    public float mouseSensitivity = 100f;
-    private PlayerSwitcher playerSwitcher;
-    private Rigidbody rb;
-    private FirstPersonController firstPersonController;
-    private float xRotation = 0f;
+    public float thrust = 5.0f;
+    public float targetHeight = 300.0f;
+    public float maxVolumeDistance = 10.0f;
+    public AudioClip rocketSound;
 
-    void Start()
+    private Rigidbody rb;
+    private AudioSource audioSource;
+    private bool playerCollided = false;
+
+    private void Start()
     {
-        playerSwitcher = GetComponent<PlayerSwitcher>();
         rb = GetComponent<Rigidbody>();
-        firstPersonController = GetComponent<FirstPersonController>();
-        Cursor.lockState = CursorLockMode.Locked;
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = rocketSound;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        if (playerSwitcher.IsRocket)
+        if (playerCollided && Input.GetKey(KeyCode.Space))
         {
-            // Remove FirstPersonController script
-            Destroy(firstPersonController);
+            rb.AddForce(Vector3.up * thrust, ForceMode.Force);
 
-            // Disable gravity and set velocities to 0
-            rb.useGravity = false;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            // Calculate the volume of the audio based on the distance to the player
+            float distanceToPlayer = Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position);
+            float volume = Mathf.Clamp01(1.0f - distanceToPlayer / maxVolumeDistance);
 
-            // Implement rocket behavior here
-            float horizontalInput = Input.GetAxis("Horizontal");
-            Vector3 horizontalMovement = new Vector3(horizontalInput, 0, 0);
-            rb.AddForce(horizontalMovement * speed);
+            audioSource.volume = volume;
 
-            if (Input.GetKey(KeyCode.Space))
+            if (!audioSource.isPlaying)
             {
-                rb.AddForce(Vector3.up * speed);
+                audioSource.Play();
             }
+        }
+        else
+        {
+            audioSource.Stop();
+        }
 
-            // Implement camera panning here
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        // Check if the rocket has reached the target height
+        if (transform.position.y >= targetHeight)
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
 
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerCollided = true;
+        }
+    }
 
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-            transform.Rotate(Vector3.up * mouseX);
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerCollided = false;
+            audioSource.Stop();
         }
     }
 }

@@ -63,7 +63,7 @@ public class RegenerateScene : MonoBehaviour
     public void Update()
     {
         // If space key is pressed, reload this scene
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
