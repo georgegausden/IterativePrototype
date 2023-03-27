@@ -9,6 +9,7 @@ public class RocketController : MonoBehaviour
     public float targetHeight = 300.0f;
     public float maxVolumeDistance = 10.0f;
     public AudioClip rocketSound;
+    public float speed = 5.0f;
 
     private Rigidbody rb;
     private AudioSource audioSource;
@@ -25,6 +26,16 @@ public class RocketController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float angle = horizontalInput * 10.0f;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        if (horizontalInput != 0)
+        {
+            float force = thrust * Time.deltaTime * Mathf.Abs(horizontalInput);
+            rb.AddForce(transform.up * force);
+        }
+
         if (playerCollided && Input.GetKey(KeyCode.Space))
         {
             rb.AddForce(Vector3.up * thrust, ForceMode.Force);
