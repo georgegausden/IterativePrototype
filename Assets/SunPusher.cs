@@ -11,14 +11,18 @@ public class SunPusher : MonoBehaviour
 
     void Start()
     {
-        sun = GameObject.FindWithTag("Sun");
+        
     }
 
     void FixedUpdate()
     {
+        
+        sun = GameObject.FindWithTag("Sun");
+
         // Check if the player is too close to the sun
         if (Vector3.Distance(transform.position, sun.transform.position) < maxDistanceFromSun)
         {
+            Debug.Log("close");
             // Calculate the direction from the player to the sun
             Vector3 direction = transform.position - sun.transform.position;
 
