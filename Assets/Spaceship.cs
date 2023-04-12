@@ -10,8 +10,9 @@ public class Spaceship : MonoBehaviour
     public float rollSpeed = 10;
     public float EnergyLeft = 100;
     public float maxEnergy = 100;
-    //public Text velocityText;
-    //public Text accelerationText;
+    public float fuelConsumptionRate = 0.05f; // rate at which fuel is consumed per second
+    public KeyCode forwardKey = KeyCode.W;
+    public KeyCode backwardKey = KeyCode.S;
 
     private Rigidbody rb;
 
@@ -22,12 +23,23 @@ public class Spaceship : MonoBehaviour
 
     void Update()
     {
-        // Get velocity and acceleration
-        //Vector3 velocity = rb.velocity;
-        //Vector3 acceleration = rb.velocity - rb.velocity.normalized * rb.drag;
+        // Calculate fuel consumption rate based on current velocity
+        float fuelConsumption = rb.velocity.magnitude * fuelConsumptionRate * Time.deltaTime;
 
-        // Display velocity and acceleration in front of the user
-        //velocityText.text = "Velocity: x=" + velocity.x.ToString("0.00") + ", y=" + velocity.y.ToString("0.00") + ", z=" + velocity.z.ToString("0.00");
-        //accelerationText.text = "Acceleration: x=" + acceleration.x.ToString("0.00") + ", y=" + acceleration.y.ToString("0.00") + ", z=" + acceleration.z.ToString("0.00");
+        // Check if forward or backward key is pressed and adjust fuel consumption rate
+        if (Input.GetKey(forwardKey))
+        {
+            fuelConsumption *= 2f; // consume fuel at double the rate when moving forward
+        }
+        else if (Input.GetKey(backwardKey))
+        {
+            fuelConsumption *= 0.5f; // consume fuel at half the rate when moving backward
+        }
+
+        // Subtract fuel consumption from energy left
+        EnergyLeft -= fuelConsumption;
+
+        // Clamp energy left to be between 0 and maxEnergy
+        EnergyLeft = Mathf.Clamp(EnergyLeft, 0f, maxEnergy);
     }
 }
