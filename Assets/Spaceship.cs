@@ -41,5 +41,12 @@ public class Spaceship : MonoBehaviour
 
         // Clamp energy left to be between 0 and maxEnergy
         EnergyLeft = Mathf.Clamp(EnergyLeft, 0f, maxEnergy);
+
+        // Check if energy left has hit 0, and regenerate scene if it has
+        if (EnergyLeft <= 0f)
+        {
+            RegenerateScene sceneRegenerator = FindObjectOfType<RegenerateScene>();
+            sceneRegenerator.Start();
+        }
     }
 }
